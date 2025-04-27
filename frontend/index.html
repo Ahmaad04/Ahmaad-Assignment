@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="flaggingApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Candidate Evaluation System</title>
+
+  <!-- Angular JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body ng-controller="FlagController as ctrl">
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <i class="fas fa-user-md"></i>
+        <h1>Medical Evaluation</h1>
+      </div>
+      <div>
+        <button class="btn btn-danger" ng-click="ctrl.clearData()">
+          <i class="fas fa-trash-alt"></i> Reset
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="card form-card">
+        <div class="card-header">
+          <h2><i class="fas fa-clipboard-list"></i> Candidate Information</h2>
+          <span class="step-indicator">{{ctrl.currentSection}}/{{ctrl.totalSections}}</span>
+        </div>
+
+        <form ng-submit="ctrl.evaluateCandidate()" novalidate>
+          <!-- Progress Bar -->
+          <div class="progress-bar-container">
+            <div class="progress-bar" ng-style="{'width': ctrl.getProgress() + '%'}"></div>
+            <span class="progress-text">Step {{ctrl.currentSection}} of {{ctrl.totalSections}}</span>
+          </div>
+
+          <!-- Section Tabs -->
+          <div class="section-tabs">
+            <button type="button" class="section-tab" 
+                    ng-class="{'active': ctrl.activeSection === 'personal'}"
+                    ng-click="ctrl.setActiveSection('personal')">
+              <i class="fas fa-user"></i> Personal
+            </button>
+            <button type="button" class="section-tab" 
+                    ng-class="{'active': ctrl.activeSection === 'practice'}"
+                    ng-click="ctrl.setActiveSection('practice')">
+              <i class="fas fa-stethoscope"></i> Practice
+            </button>
+            <button type="button" class="section-tab" 
+                    ng-class="{'active': ctrl.activeSection === 'education'}"
+                    ng-click="ctrl.setActiveSection('education')">
+              <i class="fas fa-graduation-cap"></i> Education
+            </button>
+            <button type="button" class="section-tab" 
+                    ng-class="{'active': ctrl.activeSection === 'proficiency'}"
+                    ng-click="ctrl.setActiveSection('proficiency')">
+              <i class="fas fa-language"></i> Proficiency
+            </button>
+            <button type="button" class="section-tab" 
+                    ng-class="{'active': ctrl.activeSection === 'exams'}"
+                    ng-click="ctrl.setActiveSection('exams')">
+              <i class="fas fa-file-alt"></i> Exams
+            </button>
+          </div>
+
+          <!-- Personal Information Section -->
+          <section class="form-section" ng-show="ctrl.activeSection === 'personal'">
+            <h3>Personal Information</h3>
+            <div class="form-grid">
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('First Name is required')}">
+                <label for="firstName">First Name <span class="required">*</span></label>
+                <input type="text" id="firstName" ng-model="ctrl.candidate.firstName" required>
+                <div class="field-hint" ng-show="ctrl.showHints">Legal first name as it appears on documents</div>
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Last Name is required')}">
+                <label for="lastName">Last Name <span class="required">*</span></label>
+                <input type="text" id="lastName" ng-model="ctrl.candidate.lastName" required>
+                <div class="field-hint" ng-show="ctrl.showHints">Legal last name as it appears on documents</div>
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Email is required')}">
+                <label for="email">Email <span class="required">*</span></label>
+                <input type="email" id="email" ng-model="ctrl.candidate.email" required>
+                <div class="field-hint" ng-show="ctrl.showHints">Primary contact email address format must be user@gmail.com</div>
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Date of Birth is required')}">
+                <label for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+                <input type="date" id="dateOfBirth" ng-model="ctrl.candidate.dateOfBirth" required>
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Legal Status is required')}">
+                <label for="legalStatus">Legal Status <span class="required">*</span></label>
+                <select id="legalStatus" ng-model="ctrl.candidate.legalStatus" required>
+                  <option value="">Select status...</option>
+                  <option value="Permanent Resident">Permanent Resident</option>
+                  <option value="Canadian Citizen">Canadian Citizen</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="field-hint" ng-show="ctrl.showHints && ctrl.candidate.legalStatus === 'Other'">Note: Only Permanent Residents and Canadian Citizens are eligible</div>
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Driver\'s License Type is required')}">
+                <label for="driversLicense">Driver's License Type</label>
+                <input type="text" id="driversLicense" ng-model="ctrl.candidate.driversLicenseType" placeholder="e.g. G, Class 5...">
+              </div>
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Valid Driver\'s License is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.hasValidDriversLicense">
+                  <span class="checkmark"></span>
+                  Valid Driver's License
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- Practice & Experience Section -->
+          <section class="form-section" ng-show="ctrl.activeSection === 'practice'">
+            <h3>Practice & Experience</h3>
+            <div class="form-grid">
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Total In-Person Hours is required')}">
+                <label for="inPersonHours">Total In-Person Hours <span class="required">*</span></label>
+                <input type="number" id="inPersonHours" ng-model="ctrl.candidate.totalInPersonHours" required min="0">
+                <div class="field-hint" ng-show="ctrl.showHints">Minimum 720 hours required unless Canadian practice experience criteria is met</div>
+              </div>
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Meets Canadian Practice Experience is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.meetsCanadianPracticeExperience">
+                  <span class="checkmark"></span>
+                  Meets Canadian Practice Experience
+                </label>
+              </div>
+            </div>
+
+            <h3>PRA Attempts</h3>
+            <div class="form-grid">
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Written TDM Exam is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.writtenTDM">
+                  <span class="checkmark"></span>
+                  Written TDM Exam
+                </label>
+              </div>
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Passed TDM Exam is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.resultTDM">
+                  <span class="checkmark"></span>
+                  Passed TDM Exam
+                </label>
+              </div>
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Currently Participating in PRA Elsewhere is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.currentPRAParticipationOtherJurisdiction">
+                  <span class="checkmark"></span>
+                  Currently Participating in PRA Elsewhere
+                </label>
+                <div class="field-hint" ng-show="ctrl.showHints && ctrl.candidate.currentPRAParticipationOtherJurisdiction">Note: Participation in another jurisdiction's PRA may affect eligibility</div>
+              </div>
+            </div>
+            
+            <h3>Postgrad Training & Practice</h3>
+            <div class="form-grid">
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Months of Postgrad Training is required')}">
+                <label for="monthsPostgrad">Months of Postgrad Training</label>
+                <input type="number" id="monthsPostgrad" ng-model="ctrl.candidate.numberOfMonthsOfPostgradTraining" min="0">
+                <div class="field-hint" ng-show="ctrl.showHints">Either 24+ months with 24+ months practice, or 12+ months with 36+ months practice required</div>
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Months of Independent Practice is required')}">
+                <label for="monthsPractice">Months of Independent Practice</label>
+                <input type="number" id="monthsPractice" ng-model="ctrl.candidate.numberOfMonthsOfIndependentPractice" min="0">
+              </div>
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Completed 2-Year Postgrad Program is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.completed2YearPostgrad">
+                  <span class="checkmark"></span>
+                  Completed 2-Year Postgrad Program
+                </label>
+              </div>
+            </div>
+
+            <h3>Rotations & Impairment</h3>
+            <div class="form-grid">
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Completed Seven Rotations is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.completedSevenRotations">
+                  <span class="checkmark"></span>
+                  Completed Seven Rotations
+                </label>
+              </div>
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Reports Impairment to Practice Safely is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.impairmentInAbilityToPractice">
+                  <span class="checkmark"></span>
+                  Reports Impairment to Practice Safely
+                </label>
+                <div class="field-hint warning" ng-show="ctrl.showHints && ctrl.candidate.impairmentInAbilityToPractice">Note: This may affect eligibility</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Medical Education Section -->
+          <section class="form-section" ng-show="ctrl.activeSection === 'education'">
+            <h3>Medical Education</h3>
+            <div class="form-grid">
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Medical School is required')}">
+                <label for="medicalSchool">Medical School <span class="required">*</span></label>
+                <input type="text" id="medicalSchool" ng-model="ctrl.candidate.medicalSchool" required>
+                <div class="field-hint" ng-show="ctrl.showHints">Full name of medical school/university attended</div>
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Degree Program is required')}">
+                <label for="degreeProgram">Degree Program <span class="required">*</span></label>
+                <input type="text" id="degreeProgram" ng-model="ctrl.candidate.medDegreeProgramName" required>
+                <div class="field-hint" ng-show="ctrl.showHints">E.g., MD, MBBS</div>
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Graduation Year is required')}">
+                <label for="graduationYear">Graduation Year <span class="required">*</span></label>
+                <input type="number" id="graduationYear" ng-model="ctrl.candidate.graduationYear" required min="1950" max="2025">
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('Language of Education is required')}">
+                <label for="languageOfEducation">Language of Education <span class="required">*</span></label>
+                <input type="text" id="languageOfEducation" ng-model="ctrl.candidate.languageOfEducation" required>
+              </div>
+            </div>
+          </section>
+
+          <!-- English Proficiency Section -->
+          <section class="form-section" ng-show="ctrl.activeSection === 'proficiency'">
+            <h3>English Proficiency</h3>
+            <div class="form-grid">
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Has Proof of English Proficiency is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.proofOfEnglishProficiency">
+                  <span class="checkmark"></span>
+                  Has Proof of English Proficiency
+                </label>
+              </div>
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('English Exam Meets/Exceeds Minimum Requirement is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.englishExamExpiredOrExceededMinimumRequirement">
+                  <span class="checkmark"></span>
+                  English Exam Meets/Exceeds Minimum Requirement
+                </label>
+              </div>
+              <div class="form-group checkbox-group" ng-class="{'has-error': ctrl.validationErrors.includes('Active Use of English is required')}">
+                <label class="checkbox-container">
+                  <input type="checkbox" ng-model="ctrl.candidate.activeUseOfEnglish">
+                  <span class="checkmark"></span>
+                  Active Use of English
+                </label>
+              </div>
+              <div class="field-hint" ng-show="ctrl.showHints">
+                Note: At least one of these English proficiency criteria must be met
+              </div>
+            </div>
+          </section>
+
+          <!-- Exam Dates Section -->
+          <section class="form-section" ng-show="ctrl.activeSection === 'exams'">
+            <h3>Exam Dates</h3>
+            <div class="form-grid">
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('NAC Exam Date is required')}">
+                <label for="nacDate">NAC Exam Date</label>
+                <input type="date" id="nacDate" ng-model="ctrl.candidate.nacDate">
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('MCCQE2 Exam Date is required')}">
+                <label for="mccqe2Date">MCCQE2 Exam Date</label>
+                <input type="date" id="mccqe2Date" ng-model="ctrl.candidate.mccqe2Date">
+              </div>
+              <div class="form-group" ng-class="{'has-error': ctrl.validationErrors.includes('MCCQE1 Exam Date is required')}">
+                <label for="mccqe1Date">MCCQE1 Exam Date</label>
+                <input type="date" id="mccqe1Date" ng-model="ctrl.candidate.mccqe1Date">
+              </div>
+            </div>
+          </section>
+
+          <!-- Form Navigation -->
+          <div class="form-navigation">
+            <button type="button" class="btn btn-secondary" ng-if="ctrl.hasPreviousSection()" ng-click="ctrl.previousSection()">
+              <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn btn-primary" ng-if="ctrl.hasNextSection()" ng-click="ctrl.nextSection()">
+              Next <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="submit" class="btn btn-success" ng-if="!ctrl.hasNextSection()">
+              <i class="fas fa-check-circle"></i> Evaluate Candidate
+            </button>
+            <label class="toggle-hints">
+              <input type="checkbox" ng-model="ctrl.showHints"> Show Field Hints
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <!-- Results Section -->
+      <div class="card results-card" ng-if="ctrl.flags.length > 0">
+        <div class="card-header" ng-class="{'results-pass': ctrl.overallStatus === 'PASS', 
+                                         'results-review': ctrl.overallStatus === 'REVIEW',
+                                         'results-fail': ctrl.overallStatus === 'FAIL'}">
+          <h2><i class="fas fa-flag"></i> Evaluation Results</h2>
+          <div class="status-badge" ng-class="{'status-pass': ctrl.overallStatus === 'PASS', 
+                                            'status-review': ctrl.overallStatus === 'REVIEW',
+                                            'status-fail': ctrl.overallStatus === 'FAIL'}">
+            {{ctrl.overallStatus}}
+          </div>
+        </div>
+
+        <div class="flags-summary">
+          <div class="flag-count">
+            <div class="critical-count">
+              <i class="fas fa-exclamation-circle"></i>
+              <span>{{ctrl.getCriticalCount()}} Critical</span>
+            </div>
+            <div class="warning-count">
+              <i class="fas fa-exclamation-triangle"></i>
+              <span>{{ctrl.getWarningCount()}} Warning</span>
+            </div>
+          </div>
+          
+          <div class="flags-list">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Issue</th>
+                  <th>Severity</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="flag in ctrl.flags" ng-class="{'flag-critical': flag.severity==='critical', 'flag-warning': flag.severity==='warning', 'flag-acknowledged': flag.status==='ACKNOWLEDGE', 'flag-overridden': flag.status==='OVERRIDDEN'}">
+                  <td>{{ctrl.formatFieldName(flag.field)}}</td>
+                  <td>{{flag.reason}}</td>
+                  <td>
+                    <span class="flag-severity" ng-class="{'severity-critical': flag.severity==='critical', 'severity-warning': flag.severity==='warning'}">
+                      <i ng-if="flag.severity==='critical'" class="fas fa-exclamation-circle"></i>
+                      <i ng-if="flag.severity==='warning'" class="fas fa-exclamation-triangle"></i>
+                      {{flag.severity}}
+                    </span>
+                  </td>
+                  <td>{{flag.status}}</td>
+                  <td class="flag-actions">
+                    <button class="btn btn-sm btn-outline" ng-click="ctrl.acknowledgeFlag(flag)" ng-disabled="flag.status !== 'open'">
+                      <i class="fas fa-check"></i> Acknowledge
+                    </button>
+                    <button class="btn btn-sm btn-outline" ng-click="ctrl.overrideFlag(flag)" ng-disabled="flag.status !== 'open'">
+                      <i class="fas fa-shield-alt"></i> Override
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="evaluation-summary">
+            <h3>Summary</h3>
+            <p ng-if="ctrl.overallStatus === 'PASS'">
+              <i class="fas fa-check-circle text-success"></i>
+              This candidate meets all critical requirements. Review any warnings before proceeding.
+            </p>
+            <p ng-if="ctrl.overallStatus === 'REVIEW'">
+              <i class="fas fa-search text-warning"></i>
+              This candidate has warnings that require review. The candidate meets all critical requirements.
+            </p>
+            <p ng-if="ctrl.overallStatus === 'FAIL'">
+              <i class="fas fa-times-circle text-danger"></i>
+              This candidate does not meet one or more critical requirements. Review the critical flags.
+            </p>
+            <div class="action-buttons">
+              <button class="btn btn-secondary" ng-click="ctrl.printResults()">
+                <i class="fas fa-print"></i> Print
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>&copy; 2025 Medical Practice Assessment System</p>
+    </footer>
+  </div>
+
+  <!-- Custom JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>

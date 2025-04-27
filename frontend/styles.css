@@ -1,0 +1,629 @@
+/**
+ * Medical Candidate Evaluation System - Styles
+ * Modern, clean UI with responsive design
+ */
+
+/* ========== Base Styles ========== */
+:root {
+    /* Color Palette */
+    --primary: #2c6fbb;
+    --primary-light: #3d8ad8;
+    --primary-dark: #1c4d82;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --warning: #f9a825;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --white: #ffffff;
+    --body-bg: #f5f7fa;
+  
+    /* Status Colors */
+    --pass: #28a745;
+    --review: #f9a825;
+    --fail: #dc3545;
+  
+    /* Font Sizes */
+    --font-small: 0.875rem;
+    --font-normal: 1rem;
+    --font-medium: 1.125rem;
+    --font-large: 1.25rem;
+    --font-xlarge: 1.5rem;
+  
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+  
+    /* Border Radius */
+    --border-radius-sm: 0.25rem;
+    --border-radius-md: 0.5rem;
+    --border-radius-lg: 0.75rem;
+  
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: var(--font-normal);
+    line-height: 1.6;
+    color: var(--dark);
+    background-color: var(--body-bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* Container setup */
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  /* ========== Header ========== */
+  .app-header {
+    background-color: var(--white);
+    padding: var(--spacing-md) var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+  
+  .logo i {
+    font-size: 1.75rem;
+    color: var(--primary);
+  }
+  
+  .logo h1 {
+    font-size: var(--font-large);
+    font-weight: 600;
+    color: var(--primary-dark);
+  }
+  
+  /* ========== Main Content ========== */
+  .main-content {
+    flex: 1;
+    padding: var(--spacing-xl);
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  /* ========== Cards ========== */
+  .card {
+    background-color: var(--white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .card-header {
+    padding: var(--spacing-lg);
+    background-color: var(--primary);
+    color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .card-header h2 {
+    margin: 0;
+    font-size: var(--font-xlarge);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .card-header h2 i {
+    font-size: var(--font-xlarge);
+  }
+  
+  .step-indicator {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: 1rem;
+    font-weight: 600;
+  }
+  
+  /* ========== Form Elements ========== */
+  /* 1) Progress container now relative for absolute text */
+  .progress-bar-container {
+    position: relative;
+    height: 6px;
+    background-color: #e9ecef;
+    overflow: hidden;
+  }
+  
+  /* Bar itself */
+  .progress-bar {
+    height: 100%;
+    background-color: var(--primary);
+    transition: width 0.3s ease;
+  }
+  
+  /* 2) Progress text positioned absolutely */
+  .progress-text {
+    position: absolute;
+    top: -1.5rem;
+    right: 0;
+    font-size: var(--font-small);
+    font-weight: 500;
+    color: var(--secondary);
+  }
+  
+  /* Tabs */
+  .section-tabs {
+    display: flex;
+    justify-content: center;
+    padding: var(--spacing-lg);
+    border-bottom: 2px solid #eee;
+    background-color: var(--white);
+    overflow-x: auto;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+  
+  .section-tab {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--secondary);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  
+  .section-tab:hover {
+    color: var(--primary);
+    background-color: rgba(44, 111, 187, 0.05);
+  }
+  
+  .section-tab.active {
+    background-color: var(--primary);
+    color: var(--white);
+    font-weight: 600;
+  }
+  
+  .section-tab i {
+    font-size: 1.1rem;
+  }
+  
+  /* Section wrapper */
+  .form-section {
+    padding: var(--spacing-xl);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .form-section h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--primary-dark);
+    font-weight: 600;
+    font-size: var(--font-medium);
+    border-bottom: 1px solid #eee;
+    padding-bottom: var(--spacing-sm);
+  }
+  
+  /* 3) Grid bump to 280px and top align */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    align-items: start;
+  }
+  
+  /* 4) Make each form-group a column flex container */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    color: var(--dark);
+    font-size: var(--font-medium);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.85rem;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-normal);
+    transition: border-color 0.2s;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(44, 111, 187, 0.15);
+  }
+  
+  .field-hint {
+    font-size: var(--font-small);
+    color: var(--secondary);
+    margin-top: var(--spacing-xs);
+  }
+  
+  .field-hint.warning {
+    color: var(--warning);
+  }
+  
+  .required {
+    color: var(--danger);
+    font-weight: bold;
+    margin-left: var(--spacing-xs);
+  }
+  
+  /* Checkbox Styling */
+  .checkbox-group {
+    margin-top: var(--spacing-md);
+  }
+  
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+  
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 24px;
+    width: 24px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .checkbox-container:hover input ~ .checkmark {
+    background-color: #f0f0f0;
+  }
+  
+  .checkbox-container input:checked ~ .checkmark {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .checkbox-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  /* Navigation buttons */
+  .form-navigation {
+    padding: var(--spacing-lg);
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .toggle-hints {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-small);
+    color: var(--secondary);
+  }
+  
+  .toggle-hints input {
+    margin-right: var(--spacing-xs);
+  }
+  
+  /* ========== Buttons ========== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-size: var(--font-normal);
+    letter-spacing: 0.02em;
+  }
+  
+  .btn i {
+    font-size: 1rem;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--white);
+  }
+  .btn-primary:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  .btn-secondary {
+    background-color: var(--secondary);
+    color: var(--white);
+  }
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  .btn-success {
+    background-color: var(--success);
+    color: var(--white);
+  }
+  .btn-success:hover {
+    background-color: #218838;
+  }
+  
+  .btn-danger {
+    background-color: var(--danger);
+    color: var(--white);
+  }
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+  
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: var(--font-small);
+  }
+  
+  .btn-outline {
+    background: transparent;
+    border: 1px solid currentColor;
+  }
+  
+  
+  /* ========== Responsive Adjustments ========== */
+  @media (max-width: 768px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Input validation */
+  input:invalid,
+  select:invalid {
+    border-color: var(--danger);
+  }
+  
+  input:focus:invalid,
+  select:focus:invalid {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
+  }
+  
+  /* Fade-in animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* ========== Flags List Table Styling ========== */
+/* Make headers stand out and stick on scroll */
+.flags-list table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    font-size: var(--font-normal);
+  }
+  
+  /* Header row */
+  .flags-list th {
+    background-color: #e9eff7;
+    color: var(--dark);
+    font-weight: 600;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  /* Cells */
+  .flags-list td {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+  }
+  
+  /* Zebra-striped rows */
+  .flags-list tbody tr:nth-child(even) {
+    background-color: #f9fbfc;
+  }
+  
+  /* Hover highlight */
+  .flags-list tbody tr:hover {
+    background-color: rgba(44, 111, 187, 0.05);
+  }
+  
+  /* Severity icons alignment */
+  .flags-list .flag-severity {
+    white-space: nowrap;
+  }
+  
+  /* Actions column: center the buttons */
+  .flags-list .flag-actions {
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  /* Make sure the table scrolls horizontally if it overflows */
+  .flags-list {
+    overflow-x: auto;
+  }
+  
+  /* ========== Severity Badges ========== */
+.flag-severity {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-small);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  /* Critical = red background */
+  .flag-severity.severity-critical {
+    background-color: var(--danger);
+    color: var(--white);
+  }
+  
+  /* Warning = yellow background */
+  .flag-severity.severity-warning {
+    background-color: var(--warning);
+    color: var(--dark);
+  }
+  
+  /* (Optional) Pass = green background, if you ever use it */
+  .flag-severity.severity-pass {
+    background-color: var(--pass);
+    color: var(--white);
+  }
+  
+  /* ========== Results Card Container ========== */
+.results-card {
+    border: 1px solid var(--primary);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    margin-top: var(--spacing-lg);
+  }
+  
+  /* Slightly darker header for contrast */
+  .results-card .card-header {
+    background-color: var(--primary-dark);
+  }
+  
+  /* ========== Summary Callout Styles ========== */
+  .evaluation-summary {
+    background-color: var(--light);
+    border-left: 4px solid var(--fail);   /* default to “fail” color */
+    padding: var(--spacing-lg);
+    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+    margin-top: var(--spacing-lg);
+  }
+  
+  /* Dynamic border-color based on overallStatus */
+  .results-card .card-header.results-pass ~ .flags-summary .evaluation-summary {
+    border-left-color: var(--pass);
+  }
+  .results-card .card-header.results-review ~ .flags-summary .evaluation-summary {
+    border-left-color: var(--review);
+  }
+  .results-card .card-header.results-fail ~ .flags-summary .evaluation-summary {
+    border-left-color: var(--fail);
+  }
+  
+  /* Summary heading */
+  .evaluation-summary h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-large);
+    color: var(--dark);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  /* Summary message */
+  .evaluation-summary p {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-normal);
+  }
+  
+  /* Color the icon/text in the summary */
+  .evaluation-summary .text-success { color: var(--pass); }
+  .evaluation-summary .text-warning { color: var(--warning); }
+  .evaluation-summary .text-danger  { color: var(--fail); }
+  
+  /* Print button in summary */
+  .evaluation-summary .action-buttons {
+    margin-top: var(--spacing-md);
+  }
+  .evaluation-summary .action-buttons .btn {
+    background-color: var(--secondary);
+    color: var(--white);
+  }
+  .evaluation-summary .action-buttons .btn:hover {
+    background-color: #5a6268;
+  }
+  
+  /* Highlight the field wrapper in red */
+.has-error input,
+.has-error select {
+  border-color: var(--danger);
+}
+
+/* Inline error message */
+.error-msg {
+  font-size: var(--font-small);
+  color: var(--danger);
+  margin-top: var(--spacing-xs);
+}
